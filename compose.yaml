@@ -11,10 +11,16 @@ services:
     secrets:
       - anthropic-api-key
       - db-password-prod
+      - jwt-private-key
+      - jwt-public-key
+    env_file:
+      - secrets/jwt.env
     environment:
       - DB_PASSWORD_PROD_FILE=/run/secrets/db-password-prod
-      - CORS_ALLOW_ORIGIN=^https://photo-gallery\.jmediatechnology\.com$
       - ANTHROPIC_API_KEY_FILE=/run/secrets/anthropic-api-key
+      - JWT_SECRET_KEY=/run/secrets/jwt-private-key
+      - JWT_PUBLIC_KEY=/run/secrets/jwt-public-key
+      - CORS_ALLOW_ORIGIN=^https://photo-gallery\.jmediatechnology\.com$$
     restart: unless-stopped
 
   react-prod:
@@ -63,3 +69,7 @@ secrets:
     file: secrets/db-password-prod.txt
   anthropic-api-key:
     file: secrets/anthropic-api-key.txt
+  jwt-private-key:
+    file: secrets/jwt-private.pem
+  jwt-public-key:
+    file: secrets/jwt-public.pem
