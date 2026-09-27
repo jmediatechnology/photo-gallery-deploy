@@ -13,6 +13,7 @@ services:
       - db-password-prod
     environment:
       - DB_PASSWORD_PROD_FILE=/run/secrets/db-password-prod
+      - CORS_ALLOW_ORIGIN=^https://photo-gallery\.jmediatechnology\.com$
       - ANTHROPIC_API_KEY_FILE=/run/secrets/anthropic-api-key
     restart: unless-stopped
 
