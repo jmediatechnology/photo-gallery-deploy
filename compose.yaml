@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: mariadb:11
+    image: mariadb:12
     volumes:
       - db-data-prod:/var/lib/mysql
     secrets:

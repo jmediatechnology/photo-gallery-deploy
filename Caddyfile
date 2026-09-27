@@ -1,7 +1,13 @@
-jmediatechnology.com, www.jmediatechnology.com, photo-gallery.jmediatechnology.com {
+photo-gallery.jmediatechnology.com {
     reverse_proxy react-prod:8080
 }
 
 api.jmediatechnology.com {
     reverse_proxy server:80
+}
+
+# Apex and www are not yet in use (reserved for a future portfolio landing
+# page). Redirect them to the gallery for now instead of leaving them dead.
+jmediatechnology.com, www.jmediatechnology.com {
+    redir https://photo-gallery.jmediatechnology.com{uri} permanent
 }
