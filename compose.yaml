@@ -1,0 +1,64 @@
+services:
+  server:
+    image: ghcr.io/jmediatechnology/photo-gallery-server:latest
+    expose:
+      - "80"
+    entrypoint: ["/var/www/html/docker/entrypoint-prod.sh"]
+    command: ["apache2-foreground"]
+    depends_on:
+      db:
+        condition: service_healthy
+    secrets:
+      - anthropic-api-key
+      - db-password-prod
+    environment:
+      - DB_PASSWORD_PROD_FILE=/run/secrets/db-password-prod
+      - ANTHROPIC_API_KEY_FILE=/run/secrets/anthropic-api-key
+    restart: unless-stopped
+
+  react-prod:
+    image: ghcr.io/jmediatechnology/photo-gallery-client:latest
+    expose:
+      - "8080"
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - server
+      - react-prod
+    restart: unless-stopped
+
+  db:
+    image: mariadb:11
+    volumes:
+      - db-data-prod:/var/lib/mysql
+    secrets:
+      - db-password-prod
+    environment:
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/db-password-prod
+      - MARIADB_DATABASE=photo-gallery
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  db-data-prod:
+  caddy-data:
+  caddy-config:
+
+secrets:
+  db-password-prod:
+    file: secrets/db-password-prod.txt
+  anthropic-api-key:
+    file: secrets/anthropic-api-key.txt

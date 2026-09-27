@@ -1,0 +1,7 @@
+jmediatechnology.com, www.jmediatechnology.com, photo-gallery.jmediatechnology.com {
+    reverse_proxy react-prod:8080
+}
+
+api.jmediatechnology.com {
+    reverse_proxy server:80
+}
