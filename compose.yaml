@@ -21,6 +21,8 @@ services:
       - JWT_SECRET_KEY=/run/secrets/jwt-private-key
       - JWT_PUBLIC_KEY=/run/secrets/jwt-public-key
       - CORS_ALLOW_ORIGIN=^https://photo-gallery\.jmediatechnology\.com$$
+    volumes:
+      - photograph-files:/var/www/html/public/uploads/photographs
     restart: unless-stopped
 
   react-prod:
@@ -63,6 +65,7 @@ volumes:
   db-data-prod:
   caddy-data:
   caddy-config:
+  photograph-files:
 
 secrets:
   db-password-prod:
