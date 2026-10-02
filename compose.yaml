@@ -43,6 +43,7 @@ services:
     depends_on:
       - server
       - react-prod
+    networks: [default, proxy]
     restart: unless-stopped
 
   db:
@@ -60,6 +61,10 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+
+networks:
+  proxy:
+    external: true
 
 volumes:
   db-data-prod:
