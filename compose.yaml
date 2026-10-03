@@ -22,7 +22,8 @@ services:
       - JWT_PUBLIC_KEY=/run/secrets/jwt-public-key
       - CORS_ALLOW_ORIGIN=^https://photo-gallery\.jmediatechnology\.com$$
     volumes:
-      - photograph-files:/var/www/html/public/uploads/photographs
+      # Must match UPLOAD_DIR in photo-gallery-server .env.prod
+      - photograph-files:/var/www/html/public/images
     restart: unless-stopped
 
   react-prod:
